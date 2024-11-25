@@ -33,31 +33,46 @@ async function authenticateSalesforce() {
 }
 
 module.exports = async (req, res) => {
-    // Configurar encabezados CORS
-    res.setHeader('Access-Control-Allow-Origin', 'https://distoyota.com'); // Permitir solicitudes solo desde este origen
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Métodos permitidos
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Encabezados permitidos
- 
-    // Manejar preflight request (OPTIONS)
+    res.setHeader('Access-Control-Allow-Origin', 'https://distoyota.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
     if (req.method === 'OPTIONS') {
-        return res.status(200).end(); // Terminar preflight request
+        return res.status(200).end();
     }
- 
+
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
             const { access_token, instance_url } = authData;
- 
+
             console.log('Acceso autorizado a Salesforce:');
             console.log('Token de acceso:', access_token);
             console.log('URL de la instancia:', instance_url);
- 
+
             console.log('Datos enviados (req.body):', req.body);
- 
+
+            const salesforceResponse = await fetch(instance_url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${access_token}`,
+                },
+                body: JSON.stringify(req.body),
+            });
+
+            if (!salesforceResponse.ok) {
+                const errorText = await salesforceResponse.text();
+                throw new Error(`Error al enviar los datos a Salesforce: ${errorText}`);
+            }
+
+            const responseData = await salesforceResponse.json();
+        
             res.status(200).json({
-                message: 'Datos procesados con éxito',
+                message: 'Datos enviados a SalesForce con éxito',
                 access_token,
                 instance_url,
+                salesForceResponse: responseData,
                 request_data: req.body
             });
         } catch (error) {
