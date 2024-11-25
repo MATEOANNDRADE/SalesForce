@@ -1,9 +1,9 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const SALESFORCE_AUTH_URL = 'https://test.salesforce.com/services/oauth2/token';
-const CLIENT_ID = '3MVG9oZtFCVWuSwNbU9py_ihvJu.3_bijzk_q3eNeJpwfImP9llxd..n_cpV.zHYliHfXGV2bpJ5C6z61JB4o';
-const CLIENT_SECRET = '51CEBCF55CE78CFB2BF2D11DC483365DF38D9DFB23916A860FD5397FAE2E3CAD';
-const USERNAME = 'integration@toyota.com.dev';
-const PASSWORD = 'ATCT0y0@D3VP1#24*$vFmofL85D5vBOz0pFTvjgRMk';
+const SALESFORCE_AUTH_URL = 'https://login.salesforce.com/services/oauth2/token';
+const CLIENT_ID = '3MVG9X4LnCkfEVVhdhBNpParSm5Nj7jZjvcRurY3Ty5fKYjJzzJ7zevxyQrJwP60mCpp2m3zbgcEZwJT114BI';
+const CLIENT_SECRET = '47B30C4368E436B2890C0FA90026BCA2C9F10392A5B8454491EEA0FC6DD9515D';
+const USERNAME = 'integration@toyota.com';
+const PASSWORD = 'ATCT0y0@P1#24*$cZ6EdXgKlCjBxqW4tZa2aGfmF';
 async function authenticateSalesforce() {
     const body = new URLSearchParams({
         grant_type: 'password',
@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
-            const { access_token, instance_url, id, signature, issued_at } = authData;
+            const { access_token, instance_url } = authData;
 
             console.log('Acceso autorizado a Salesforce:');
             console.log('Token de acceso:', access_token);
@@ -52,11 +52,12 @@ module.exports = async (req, res) => {
 
             console.log('Datos enviados (req.body):', req.body);
 
-            const urlData = `https://test.salesforce.com/servlet/servlet.WebToLead?access_token=${access_token}&instance_url=${instance_url}&id=${id}&token_type=Bearer&issued_at=${issued_at}&signature=${signature}`
-            const salesforceResponse = await fetch(urlData, {
+            const salesforceEndpoint = `${instance_url}/services/data/v56.0/sobjects/Lead/`;
+            const salesforceResponse = await fetch(salesforceEndpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${access_token}`,
                 },
                 body: JSON.stringify(req.body),
             });
@@ -69,11 +70,9 @@ module.exports = async (req, res) => {
             const responseData = await salesforceResponse.json();
         
             res.status(200).json({
-                message: 'Datos enviados a SalesForce con éxito',
-                // access_token,
-                // id,
-                // instance_url,
-                // salesForceResponse: responseData,
+                message: 'Datos procesados con éxito',
+                access_token,
+                instance_url,
                 request_data: req.body
             });
         } catch (error) {
