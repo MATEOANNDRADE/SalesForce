@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
             const salesforceResponse = await fetch(instance_url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'Authorization': `Bearer ${access_token}`,
                 },
                 body: JSON.stringify(req.body),
