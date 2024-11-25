@@ -52,7 +52,7 @@ module.exports = async (req, res) => {
 
             console.log('Datos enviados (req.body):', req.body);
 
-            const salesforceEndpoint = `${instance_url}//services/data/v56.0/composite/tree/Lead`;
+            const salesforceEndpoint = `${instance_url}/services/data/v55.0/composite/sobjects`;
             const salesforceResponse = await fetch(salesforceEndpoint, {
                 method: 'POST',
                 headers: {
