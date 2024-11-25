@@ -41,6 +41,20 @@ module.exports = async (req, res) => {
         return res.status(200).end();
     }
 
+    // const formatToSalesforce = (data) => {
+    //     return {
+    //         records: [
+    //             {
+    //                 attributes: { 
+    //                     type: "Lead",
+    //                     referenceId: "prospecto1"
+    //                 },
+    //                 ...data
+    //             }
+    //         ]
+    //     };
+    // };
+
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
@@ -50,6 +64,11 @@ module.exports = async (req, res) => {
             console.log('Token de acceso:', access_token);
             console.log('URL de la instancia:', instance_url);
 
+            const formattedData = formatToSalesforce(req.body);
+
+            console.log('Datos enviados a Salesforce:', JSON.stringify(formattedData, null, 2));
+
+            
             console.log('Datos enviados (req.body):', req.body);
 
             const salesforceEndpoint = `${instance_url}/services/data/v56.0/composite/tree/Lead`;
