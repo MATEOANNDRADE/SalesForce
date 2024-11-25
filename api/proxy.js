@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
-            const { access_token, instance_url } = authData;
+            const { access_token, instance_url, id } = authData;
 
             console.log('Acceso autorizado a Salesforce:');
             console.log('Token de acceso:', access_token);
@@ -52,10 +52,10 @@ module.exports = async (req, res) => {
 
             console.log('Datos enviados (req.body):', req.body);
 
-            const salesforceResponse = await fetch(instance_url, {
+            const salesforceResponse = await fetch(id, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${access_token}`,
                 },
                 body: JSON.stringify(req.body),
@@ -71,6 +71,7 @@ module.exports = async (req, res) => {
             res.status(200).json({
                 message: 'Datos enviados a SalesForce con éxito',
                 access_token,
+                id,
                 instance_url,
                 salesForceResponse: responseData,
                 request_data: req.body
