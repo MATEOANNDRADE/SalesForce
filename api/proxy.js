@@ -2,10 +2,10 @@ const fetch = require('node-fetch'); // Si no tienes fetch, instálalo: npm inst
 
 // Credenciales para autenticarte en Salesforce
 const SALESFORCE_AUTH_URL = 'https://test.salesforce.com/services/oauth2/token';
-const CLIENT_ID = 'tu_client_id'; // Reemplaza con tu client_id
-const CLIENT_SECRET = 'tu_client_secret'; // Reemplaza con tu client_secret
-const USERNAME = 'tu_username'; // Reemplaza con tu username
-const PASSWORD = 'tu_password'; // Reemplaza con tu password (incluyendo el security token, si aplica)
+const CLIENT_ID = '3MVG9oZtFCVWuSwNbU9py_ihvJu.3_bijzk_q3eNeJpwfImP9llxd..n_cpV.zHYliHfXGV2bpJ5C6z61JB4o'; // Reemplaza con tu client_id
+const CLIENT_SECRET = '51CEBCF55CE78CFB2BF2D11DC483365DF38D9DFB23916A860FD5397FAE2E3CAD'; // Reemplaza con tu client_secret
+const USERNAME = 'integration@toyota.com.dev'; // Reemplaza con tu username
+const PASSWORD = 'ATCT0y0@D3VP1#24*$vFmofL85D5vBOz0pFTvjgRMk'; // Reemplaza con tu password (incluyendo el security token, si aplica)
 
 // Función para obtener el token de acceso desde Salesforce
 async function authenticateSalesforce() {
@@ -43,30 +43,21 @@ module.exports = async (req, res) => {
             const authData = await authenticateSalesforce();
             const { access_token, instance_url } = authData;
 
-            // Endpoint de Salesforce al que se enviarán los datos
-            const salesforceEndpoint = `${instance_url}/services/data/vXX.0/sobjects/ObjectName`; // Reemplaza "ObjectName" con el objeto al que deseas enviar datos.
+            // Mostrar en consola la información obtenida
+            console.log('Acceso autorizado a Salesforce:');
+            console.log('Token de acceso:', access_token);
+            console.log('URL de la instancia:', instance_url);
 
-            // Reenvío de datos al endpoint de Salesforce
-            const response = await fetch(salesforceEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${access_token}`,
-                },
-                body: JSON.stringify(req.body),
-            });
+            // Aquí solo mostramos los datos, no enviamos nada a Salesforce
+            // Si quieres ver cómo son los datos que se están enviando en el body de la solicitud:
+            console.log('Datos enviados (req.body):', req.body);
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Error al enviar datos a Salesforce: ${errorText}`);
-            }
-
-            const data = await response.json();
-
-            // Responder con éxito
+            // Responder con los datos obtenidos para confirmar que todo está bien
             res.status(200).json({
-                message: 'Datos enviados exitosamente a Salesforce',
-                respuestaSalesforce: data,
+                message: 'Datos procesados con éxito',
+                access_token,
+                instance_url,
+                request_data: req.body
             });
         } catch (error) {
             console.error('Error al procesar la solicitud:', error);
