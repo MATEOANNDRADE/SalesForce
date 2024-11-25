@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
-            const { access_token, instance_url, id } = authData;
+            const { access_token, instance_url, id, signature, issued_at } = authData;
 
             console.log('Acceso autorizado a Salesforce:');
             console.log('Token de acceso:', access_token);
@@ -52,11 +52,11 @@ module.exports = async (req, res) => {
 
             console.log('Datos enviados (req.body):', req.body);
 
-            const salesforceResponse = await fetch(id, {
+            const urlData = `https://test.salesforce.com/servlet/servlet.WebToLead?access_token=${access_token}&instance_url=${instance_url}&id=${id}&token_type=Bearer&issued_at=${issued_at}&signature=${signature}`
+            const salesforceResponse = await fetch(urlData, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${access_token}`,
                 },
                 body: JSON.stringify(req.body),
             });
@@ -70,10 +70,10 @@ module.exports = async (req, res) => {
         
             res.status(200).json({
                 message: 'Datos enviados a SalesForce con éxito',
-                access_token,
-                id,
-                instance_url,
-                salesForceResponse: responseData,
+                // access_token,
+                // id,
+                // instance_url,
+                // salesForceResponse: responseData,
                 request_data: req.body
             });
         } catch (error) {
