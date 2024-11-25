@@ -52,22 +52,22 @@ module.exports = async (req, res) => {
 
             console.log('Datos enviados (req.body):', req.body);
 
-            const salesforceEndpoint = `${instance_url}/services/data/v56.0/sobjects/Lead/`;
-            const salesforceResponse = await fetch(salesforceEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${access_token}`,
-                },
-                body: JSON.stringify(req.body),
-            });
+            // const salesforceEndpoint = `${instance_url}/services/data/v56.0/sobjects/Lead/`;
+            // const salesforceResponse = await fetch(salesforceEndpoint, {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': `Bearer ${access_token}`,
+            //     },
+            //     body: JSON.stringify(req.body),
+            // });
 
-            if (!salesforceResponse.ok) {
-                const errorText = await salesforceResponse.text();
-                throw new Error(`Error al enviar los datos a Salesforce: ${errorText}`);
-            }
+            // if (!salesforceResponse.ok) {
+            //     const errorText = await salesforceResponse.text();
+            //     throw new Error(`Error al enviar los datos a Salesforce: ${errorText}`);
+            // }
 
-            const responseData = await salesforceResponse.json();
+            // const responseData = await salesforceResponse.json();
         
             res.status(200).json({
                 message: 'Datos procesados con éxito',
