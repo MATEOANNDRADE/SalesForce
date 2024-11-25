@@ -33,17 +33,27 @@ async function authenticateSalesforce() {
 }
 
 module.exports = async (req, res) => {
+    // Configurar encabezados CORS
+    res.setHeader('Access-Control-Allow-Origin', 'https://distoyota.com'); // Permitir solicitudes solo desde este origen
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); // Métodos permitidos
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type'); // Encabezados permitidos
+ 
+    // Manejar preflight request (OPTIONS)
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end(); // Terminar preflight request
+    }
+ 
     if (req.method === 'POST') {
         try {
             const authData = await authenticateSalesforce();
             const { access_token, instance_url } = authData;
-
+ 
             console.log('Acceso autorizado a Salesforce:');
             console.log('Token de acceso:', access_token);
             console.log('URL de la instancia:', instance_url);
-
+ 
             console.log('Datos enviados (req.body):', req.body);
-
+ 
             res.status(200).json({
                 message: 'Datos procesados con éxito',
                 access_token,
