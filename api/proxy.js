@@ -66,7 +66,7 @@ module.exports = async (req, res) => {
 
             // const formattedData = formatToSalesforce(req.body);
 
-            console.log('Datos enviados a Salesforce:', JSON.stringify(formattedData, null, 2));
+            //console.log('Datos enviados a Salesforce:', JSON.stringify(formattedData, null, 2));
 
             
             console.log('Datos enviados (req.body):', req.body);
