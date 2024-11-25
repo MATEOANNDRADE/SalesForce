@@ -1,0 +1,67 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+ 
+# Dependencias de Node.js
+node_modules/
+bower_components/
+ 
+# Archivos de construcción
+dist/
+build/
+.out/
+ 
+# Cachés
+.cache/
+.tmp/
+.nyc_output/
+coverage/
+ 
+# Configuración y entornos
+.env
+.env.*.local
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+ 
+# Archivos de sistema
+*.swp
+*.swo
+*.bak
+*.tmp
+ 
+# Archivos de lock y paquetes específicos
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+ 
+# Archivos de despliegue
+*.log
+*.pid
+*.seed
+*.pid.lock
+ 
+# Configuración de sistemas operativos
+# macOS
+*.DS_Store
+.AppleDouble
+.LSOverride
+ 
+# Linux
+*~
+# Windows
+Thumbs.db
+ehthumbs.db
+ 
+# Otros
+*.local
+*.test
+*.spec.js
+*.log
+ 
+# Git
+.git/
