@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
             console.log('Token de acceso:', access_token);
             console.log('URL de la instancia:', instance_url);
 
-            const formattedData = formatToSalesforce(req.body);
+            // const formattedData = formatToSalesforce(req.body);
 
             console.log('Datos enviados a Salesforce:', JSON.stringify(formattedData, null, 2));
 
